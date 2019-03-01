@@ -33,7 +33,7 @@ Public Sub Run_Offset()
     
     'copy items in correct order and correct location
     i = copyToRange.StartRow + 1
-    For Each rItem In report.Items
+    For Each rItem In report.items
         Set currentRange = copyToRange.NextRow
         
         CopyItemIntoWorkbook currentRange, rItem.DCEItem

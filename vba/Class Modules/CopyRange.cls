@@ -19,6 +19,9 @@ Public Property Get EndRow() As Integer
     EndRow = StartAddressRow + Count
 End Property
 
+Public Property Get StartAddressRow()
+    StartAddressRow = Sheet.Range(startAddress).Row
+End Property
 
 Public Property Get StartRow() As Integer
     Dim startRange As Range
@@ -32,6 +35,16 @@ Private Property Get CopyWidth() As Integer
     Else
         CopyWidth = Copy_Width
     End If
+End Property
+
+Public Property Get SortColumns() As Variant
+    Dim items As Variant
+    If IsOffsetRange Then
+        items = DownLink_Columns
+    Else
+        items = DCE_Columns
+    End If
+    SortColumns = items
 End Property
 
 Public Property Get Range() As Range
@@ -83,7 +96,7 @@ Public Property Get Count() As Integer
 End Property
 
 Public Property Get CopyItems() As Collection
-    Dim Items As New Collection, cItem As CopyItem, i As Integer, j As Integer
+    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer
     
     For i = 1 To Count
         Set cItem = New CopyItem
@@ -98,10 +111,10 @@ Public Property Get CopyItems() As Collection
                 Next j
             End If
         End With
-        Items.Add cItem
+        items.Add cItem
     Next i
     
-    Set CopyItems = Items
+    Set CopyItems = items
 End Property
 
 Public Property Get IsOpen() As Boolean
