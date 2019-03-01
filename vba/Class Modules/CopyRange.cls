@@ -37,6 +37,27 @@ Private Property Get CopyWidth() As Integer
     End If
 End Property
 
+Public Property Get CopyToColumns() As Collection
+    Set CopyToColumns = New Collection
+    Dim splitItems As Variant, s As Variant
+    
+    If IsOffsetRange Then
+        splitItems = Split(DownLink_CopyTo_Columns, ",")
+    Else
+        splitItems = Split(DCE_CopyTo_Columns, ",")
+    End If
+    
+    For Each s In splitItems
+        ColumnsToCopy.Add s
+    Next s
+    
+End Property
+
+Public Property Get CopyToDateColumn() As String
+    CopyToDateColumn = CopyToColumns(1)
+End Property
+
+
 Public Function ColumnsToCopy() As Collection
     Dim splitItems As Variant, s As Variant
     Set ColumnsToCopy = New Collection

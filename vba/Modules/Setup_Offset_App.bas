@@ -5,6 +5,10 @@ Option Explicit
 Public Const DownLink_Columns As String = "A,E,F"
 Public Const DCE_Columns As String = "B,F,G"
 
+'the first column is the date column
+Public Const DownLink_CopyTo_Columns As String = "D,A,P"
+Public Const DCE_CopyTo_Columns As String = "B,F,G"
+
 Public Const Copy_Width As Integer = 3
 Public Const Offset_Width As Integer = 7
 
@@ -22,16 +26,16 @@ Public Function Add_DCEs() As CopyRange
 End Function
 
 Public Function Add_Downlinks() As CopyRange
-    Dim downlink As New CopyRange
+    Dim DownLink As New CopyRange
     
-    With downlink
+    With DownLink
         .startAddress = "D2"
         .SheetName = "DataImReadingIn"
         .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\mjdexample.xlsx"
         .IsOffsetRange = True
     End With
     
-    Set Add_Downlinks = downlink
+    Set Add_Downlinks = DownLink
 End Function
 
 Public Function Copy_To_Range() As CopyRange
