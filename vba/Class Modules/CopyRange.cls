@@ -37,15 +37,19 @@ Private Property Get CopyWidth() As Integer
     End If
 End Property
 
-Public Property Get SortColumns() As Variant
-    Dim items As Variant
+Public Function ColumnsToCopy() As Collection
+    Dim splitItems As Variant, s As Variant
+    Set ColumnsToCopy = New Collection
     If IsOffsetRange Then
-        items = DownLink_Columns
+        splitItems = Split(DownLink_Columns, ",")
     Else
-        items = DCE_Columns
+        splitItems = Split(DCE_Columns, ",")
     End If
-    SortColumns = items
-End Property
+    
+    For Each s In splitItems
+        ColumnsToCopy.Add s
+    Next s
+End Function
 
 Public Property Get Range() As Range
    Dim startRange As Range
@@ -96,7 +100,7 @@ Public Property Get Count() As Integer
 End Property
 
 Public Property Get CopyItems() As Collection
-    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer
+    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer, columnLetter As String
     
     For i = 1 To Count
         Set cItem = New CopyItem
@@ -104,10 +108,14 @@ Public Property Get CopyItems() As Collection
             If IsSingleColumn Then
                 cItem.ItemsToCopy.Add Range(i, 1).Value
             Else
-                .CopyItemDate = Range(i, 1).Value
+            
+                'Sort column is always first item in list
+                .CopyItemDate = Sheet.Range(SortColumn & i + 1).Value
                 .IsOffset = IsOffsetRange
-                For j = 2 To CopyWidth
-                    .ItemsToCopy.Add Range(i, j).Value
+                For j = 1 To ColumnsToCopy.Count
+                    columnLetter = ColumnsToCopy(j)
+                    
+                    .ItemsToCopy.Add Sheet.Range(columnLetter & i + 1).Value
                 Next j
             End If
         End With
@@ -115,6 +123,11 @@ Public Property Get CopyItems() As Collection
     Next i
     
     Set CopyItems = items
+End Property
+
+
+Public Property Get SortColumn() As String
+    SortColumn = ColumnsToCopy(1)
 End Property
 
 Public Property Get IsOpen() As Boolean
