@@ -1,6 +1,10 @@
 Attribute VB_Name = "Setup_Offset_App"
 Option Explicit
 
+'The column that apears first will be the column that sorted by
+Public Const DownLink_Columns As String = "A,E,F"
+Public Const DCE_Columns As String = "B,F,G"
+
 Public Const Copy_Width As Integer = 3
 Public Const Offset_Width As Integer = 7
 
