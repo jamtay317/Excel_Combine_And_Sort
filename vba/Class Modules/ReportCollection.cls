@@ -31,6 +31,16 @@ Public Function AddOrUpdate(cItem As CopyItem) As ReportItem
     Set AddOrUpdate = item
 End Function
 
+Public Sub AddCopyRange(cRange As CopyRange, myReportItem As ReportItem)
+    
+    If cRange.IsOffsetRange Then
+        Set myReportItem.DownLinkCopyRange = cRange
+    Else
+        Set myReportItem.DCECopyRange = cRange
+    End If
+    
+End Sub
+
 Public Sub Sort()
     Dim i As Integer, j As Integer, currentItem As ReportItem, compareItem As ReportItem, itemToMove As ReportItem
     

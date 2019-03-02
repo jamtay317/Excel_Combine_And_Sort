@@ -12,7 +12,7 @@ Option Explicit
 Public startAddress As String
 Public WorkbookAddress As String
 Public SheetName As String
-Public IsOffsetRange As Boolean
+Public IsOffsetRange As Boolean 'if isOffserRange is true this this is a downlink item
 Public IsSingleColumn As Boolean
 
 Public Property Get EndRow() As Integer
@@ -38,7 +38,7 @@ Private Property Get CopyWidth() As Integer
 End Property
 
 Public Property Get CopyToColumns() As Collection
-    Set CopyToColumns = New Collection
+    Dim c As New Collection
     Dim splitItems As Variant, s As Variant
     
     If IsOffsetRange Then
@@ -48,9 +48,10 @@ Public Property Get CopyToColumns() As Collection
     End If
     
     For Each s In splitItems
-        ColumnsToCopy.Add s
+        c.Add s
     Next s
     
+    Set CopyToColumns = c
 End Property
 
 Public Property Get CopyToDateColumn() As String
