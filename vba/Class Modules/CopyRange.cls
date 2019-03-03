@@ -12,7 +12,7 @@ Option Explicit
 Public startAddress As String
 Public WorkbookAddress As String
 Public SheetName As String
-Public IsOffsetRange As Boolean
+Public IsOffsetRange As Boolean 'if isOffserRange is true this this is a downlink item
 Public IsSingleColumn As Boolean
 
 Public Property Get EndRow() As Integer
@@ -37,15 +37,41 @@ Private Property Get CopyWidth() As Integer
     End If
 End Property
 
-Public Property Get SortColumns() As Variant
-    Dim items As Variant
+Public Property Get CopyToColumns() As Collection
+    Dim c As New Collection
+    Dim splitItems As Variant, s As Variant
+    
     If IsOffsetRange Then
-        items = DownLink_Columns
+        splitItems = Split(DownLink_CopyTo_Columns, ",")
     Else
-        items = DCE_Columns
+        splitItems = Split(DCE_CopyTo_Columns, ",")
     End If
-    SortColumns = items
+    
+    For Each s In splitItems
+        c.Add s
+    Next s
+    
+    Set CopyToColumns = c
 End Property
+
+Public Property Get CopyToDateColumn() As String
+    CopyToDateColumn = CopyToColumns(1)
+End Property
+
+
+Public Function ColumnsToCopy() As Collection
+    Dim splitItems As Variant, s As Variant
+    Set ColumnsToCopy = New Collection
+    If IsOffsetRange Then
+        splitItems = Split(DownLink_Columns, ",")
+    Else
+        splitItems = Split(DCE_Columns, ",")
+    End If
+    
+    For Each s In splitItems
+        ColumnsToCopy.Add s
+    Next s
+End Function
 
 Public Property Get Range() As Range
    Dim startRange As Range
@@ -56,7 +82,7 @@ Public Property Get Range() As Range
    startRowOffset = startRange.Row
    lr = LastRow(startRange) - startRowOffset
    
-   Set Range = Sheet.Range(startRange.Cells(1, 1), startRange.Offset(lr, CopyWidth - 1).Cells(1, 1))
+   Set Range = Sheet.UsedRange
 End Property
 
 Public Property Get NextRow() As Range
@@ -96,7 +122,7 @@ Public Property Get Count() As Integer
 End Property
 
 Public Property Get CopyItems() As Collection
-    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer
+    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer, columnLetter As String
     
     For i = 1 To Count
         Set cItem = New CopyItem
@@ -104,10 +130,14 @@ Public Property Get CopyItems() As Collection
             If IsSingleColumn Then
                 cItem.ItemsToCopy.Add Range(i, 1).Value
             Else
-                .CopyItemDate = Range(i, 1).Value
+            
+                'Sort column is always first item in list
+                .CopyItemDate = Sheet.Range(SortColumn & i + 1).Value
                 .IsOffset = IsOffsetRange
-                For j = 2 To CopyWidth
-                    .ItemsToCopy.Add Range(i, j).Value
+                For j = 1 To ColumnsToCopy.Count
+                    columnLetter = ColumnsToCopy(j)
+                    
+                    .ItemsToCopy.Add Sheet.Range(columnLetter & i + 1).Value
                 Next j
             End If
         End With
@@ -115,6 +145,11 @@ Public Property Get CopyItems() As Collection
     Next i
     
     Set CopyItems = items
+End Property
+
+
+Public Property Get SortColumn() As String
+    SortColumn = ColumnsToCopy(1)
 End Property
 
 Public Property Get IsOpen() As Boolean

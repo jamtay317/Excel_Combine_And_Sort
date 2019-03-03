@@ -24,7 +24,8 @@ Public Sub Run_Offset()
     'get items to copy
     For Each cRange In rangeCollection
         For Each cItem In cRange.CopyItems
-            report.AddOrUpdate cItem
+            Set rItem = report.AddOrUpdate(cItem)
+            report.AddCopyRange cRange, rItem
         Next cItem
     Next cRange
     
@@ -36,8 +37,7 @@ Public Sub Run_Offset()
     For Each rItem In report.items
         Set currentRange = copyToRange.NextRow
         
-        CopyItemIntoWorkbook currentRange, rItem.DCEItem
-        CopyItemIntoWorkbook currentRange.Offset(0, Offset_Width), rItem.DownLinkItem
+        CopyItemIntoWorkbook rItem, i, copyToRange.Sheet
         i = i + 1
     Next rItem
     
@@ -53,15 +53,24 @@ here:
     MsgBox Err.Description
 End Sub
 
-Private Sub CopyItemIntoWorkbook(cRange As Range, cItem As CopyItem)
-    Dim i As Integer
+Private Sub CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer, ByRef copyToSheet As Worksheet)
+    Dim letter As String, i As Integer
     
-    If cItem Is Nothing Then Exit Sub
+    'this should only try to copy the value to the new sheet if there is a copy range
+    If Not rItem.DCECopyRange Is Nothing Then
+        For i = 1 To rItem.DCECopyRange.CopyToColumns.Count
+            letter = rItem.DCECopyRange.CopyToColumns(i)
+            copyToSheet.Range(letter & rowNumber).Value = rItem.DCEItem.ItemsToCopy(i)
+        Next i
+    End If
     
-        cRange.Cells(1, 1).Value = cItem.CopyItemDate
-    For i = 1 To cItem.ItemsToCopy.Count
-            cRange.Cells(1, i + 1).Value = cItem.ItemsToCopy(i)
-    Next i
+    If Not rItem.DownLinkCopyRange Is Nothing Then
+        For i = 1 To rItem.DownLinkCopyRange.CopyToColumns.Count
+            letter = rItem.DownLinkCopyRange.CopyToColumns(i)
+            copyToSheet.Range(letter & rowNumber).Value = rItem.DownLinkItem.ItemsToCopy(i)
+        Next i
+    End If
+    
 End Sub
 
 Private Sub CloseCopyFromWorkbooks(rangeCollection As Collection)

@@ -2,7 +2,7 @@ Attribute VB_Name = "Single_Column_App"
 Option Explicit
 
 Public Sub Run_SingleColumn()
-    Dim copyFromRange As CopyRange, _
+    Dim CopyFromRange As CopyRange, _
         copyToRange As CopyRange, _
         i As Integer, _
         j As Integer, _
@@ -20,24 +20,24 @@ Public Sub Run_SingleColumn()
     
     'copy items
     For j = 1 To CopyRanges.Count
-        Set copyFromRange = CopyRanges(j)
+        Set CopyFromRange = CopyRanges(j)
         Set copyToRange = CopyToRanges(j)
         
-        For i = 1 To copyFromRange.Count
-            Set currentItem = copyFromRange.CopyItems(i)
+        For i = 1 To CopyFromRange.Count
+            Set currentItem = CopyFromRange.CopyItems(i)
             copyToRange.NextRowInRange.Value = currentItem.ItemsToCopy(1)
         Next i
         
     Next j
     
     'clean up
-    copyFromRange.ItemWorkbook.Close
+    CopyFromRange.ItemWorkbook.Close
     Application.ScreenUpdating = False
     Exit Sub
 here:
     
     'error handle
-    copyFromRange.ItemWorkbook.Close
+    CopyFromRange.ItemWorkbook.Close
     Application.ScreenUpdating = False
     MsgBox Err.Description
 End Sub

@@ -9,15 +9,16 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Items As New Collection
+Public items As New Collection
 
-Public Sub AddOrUpdate(cItem As CopyItem)
+Public Function AddOrUpdate(cItem As CopyItem) As ReportItem
     Dim item As ReportItem
     
-    For Each item In Items
+    For Each item In items
         If item.RowDate = cItem.CopyItemDate Then
             UpdateItem item, cItem
-            Exit Sub
+            Set AddOrUpdate = item
+            Exit Function
         End If
     Next item
     
@@ -26,24 +27,35 @@ Public Sub AddOrUpdate(cItem As CopyItem)
     item.RowDate = cItem.CopyItemDate
     UpdateItem item, cItem
     
-    Items.Add item
+    items.Add item
+    Set AddOrUpdate = item
+End Function
+
+Public Sub AddCopyRange(cRange As CopyRange, myReportItem As ReportItem)
+    
+    If cRange.IsOffsetRange Then
+        Set myReportItem.DownLinkCopyRange = cRange
+    Else
+        Set myReportItem.DCECopyRange = cRange
+    End If
+    
 End Sub
 
 Public Sub Sort()
     Dim i As Integer, j As Integer, currentItem As ReportItem, compareItem As ReportItem, itemToMove As ReportItem
     
-    For i = 1 To Items.Count
-        Set currentItem = Items(i)
+    For i = 1 To items.Count
+        Set currentItem = items(i)
         
-        For j = i + 1 To Items.Count
-            Set compareItem = Items(j)
+        For j = i + 1 To items.Count
+            Set compareItem = items(j)
             
             If currentItem.RowDate > compareItem.RowDate Then
                 Set itemToMove = compareItem
                 
-                Items.Remove j
+                items.Remove j
                 
-                Items.Add itemToMove, itemToMove.RowDate & "", i
+                items.Add itemToMove, itemToMove.RowDate & "", i
             End If
         Next j
     Next i

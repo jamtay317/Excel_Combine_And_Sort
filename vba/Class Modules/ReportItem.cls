@@ -13,3 +13,6 @@ Option Explicit
 Public RowDate As Double
 Public DCEItem As CopyItem
 Public DownLinkItem As CopyItem
+
+Public DCECopyRange As CopyRange
+Public DownLinkCopyRange As CopyRange
