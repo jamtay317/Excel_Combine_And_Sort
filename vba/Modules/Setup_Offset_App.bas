@@ -2,8 +2,8 @@ Attribute VB_Name = "Setup_Offset_App"
 Option Explicit
 
 'The column that apears first will be the column that sorted by
-Public Const DownLink_Columns As String = "A,C,G"
-Public Const DCE_Columns As String = "A,F,O"
+Public Const DownLink_Columns As String = "A,B,H"
+Public Const DCE_Columns As String = "A,D,J"
 
 'the first column is the date column
 Public Const DownLink_CopyTo_Columns As String = "J,L,M"
@@ -19,7 +19,7 @@ Public Function Add_DCEs() As CopyRange
     With dce
         .startAddress = "A2"
         .SheetName = "Dces"
-        .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\mjdexample.xlsx"
+        .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\newitems.xlsx"
     End With
     
     Set Add_DCEs = dce
@@ -31,7 +31,7 @@ Public Function Add_Downlinks() As CopyRange
     With DownLink
         .startAddress = "D2"
         .SheetName = "downlinks"
-        .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\mjdexample.xlsx"
+        .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\newitems.xlsx"
         .IsOffsetRange = True
     End With
     

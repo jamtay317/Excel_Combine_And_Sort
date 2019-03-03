@@ -82,7 +82,7 @@ Public Property Get Range() As Range
    startRowOffset = startRange.Row
    lr = LastRow(startRange) - startRowOffset
    
-   Set Range = Sheet.Range(startRange.Cells(1, 1), startRange.Offset(lr, CopyWidth - 1).Cells(1, 1))
+   Set Range = Sheet.UsedRange
 End Property
 
 Public Property Get NextRow() As Range
