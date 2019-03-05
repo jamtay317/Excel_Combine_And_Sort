@@ -12,7 +12,7 @@ Public Sub Run_Offset()
            rItem As ReportItem, _
            currentRange As Range
     
-    Application.ScreenUpdating = False
+    'Application.ScreenUpdating = False
     
     'Error Handle
     On Error GoTo here
@@ -30,15 +30,17 @@ Public Sub Run_Offset()
     Next cRange
     
     'sort collection
-    report.Sort
+    Call report.Sort
     
     'copy items in correct order and correct location
-    i = copyToRange.StartRow + 1
+    i = copyToRange.StartRow
     For Each rItem In report.items
-        Set currentRange = copyToRange.NextRow
+        If rItem.RowDate > 0 Then
+            Set currentRange = copyToRange.NextRow
         
-        CopyItemIntoWorkbook rItem, i, copyToRange.Sheet
-        i = i + 1
+            CopyItemIntoWorkbook rItem, i, copyToRange.Sheet
+            i = i + 1
+        End If
     Next rItem
     
     
@@ -53,7 +55,7 @@ here:
     MsgBox Err.Description
 End Sub
 
-Private Sub CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer, ByRef copyToSheet As Worksheet)
+Private Function CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer, ByRef copyToSheet As Worksheet) As Boolean
     Dim letter As String, i As Integer
     
     'this should only try to copy the value to the new sheet if there is a copy range
@@ -71,7 +73,7 @@ Private Sub CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer, ByRe
         Next i
     End If
     
-End Sub
+End Function
 
 Private Sub CloseCopyFromWorkbooks(rangeCollection As Collection)
     Dim cRange As CopyRange

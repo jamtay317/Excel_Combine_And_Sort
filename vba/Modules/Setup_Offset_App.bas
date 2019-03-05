@@ -62,7 +62,7 @@ Public Function Copy_To_Range() As CopyRange
     Dim copyToWorkbook As New CopyRange
     
     With copyToWorkbook
-        .startAddress = "A2"
+        .startAddress = "A3"
         .SheetName = "Sheet1"
         .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\ForJames.xlsx"
     End With
