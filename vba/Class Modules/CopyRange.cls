@@ -122,7 +122,7 @@ Public Property Get Count() As Integer
 End Property
 
 Public Property Get CopyItems() As Collection
-    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer, columnLetter As String
+    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer, columnLetter As String, currentRow As Integer
     
     For i = 1 To Count
         Set cItem = New CopyItem
@@ -130,14 +130,14 @@ Public Property Get CopyItems() As Collection
             If IsSingleColumn Then
                 cItem.ItemsToCopy.Add Range(i, 1).Value
             Else
-            
+                currentRow = StartRow + i - 1
                 'Sort column is always first item in list
-                .CopyItemDate = Sheet.Range(SortColumn & i + 1).Value
+                .CopyItemDate = Sheet.Range(SortColumn & currentRow).Value
                 .IsOffset = IsOffsetRange
                 For j = 1 To ColumnsToCopy.Count
                     columnLetter = ColumnsToCopy(j)
                     
-                    .ItemsToCopy.Add Sheet.Range(columnLetter & i + 1).Value
+                    .ItemsToCopy.Add Sheet.Range(columnLetter & currentRow).Value
                 Next j
             End If
         End With
