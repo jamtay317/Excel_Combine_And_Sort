@@ -78,6 +78,7 @@ Public Property Get Range() As Range
    Dim lr As Integer
    Dim startRowOffset As Integer
    
+   
    Set startRange = Sheet.Range(startAddress)
    startRowOffset = startRange.Row
    lr = LastRow(startRange) - startRowOffset
@@ -122,15 +123,20 @@ Public Property Get Count() As Integer
 End Property
 
 Public Property Get CopyItems() As Collection
-    Dim items As New Collection, cItem As CopyItem, i As Integer, j As Integer, columnLetter As String, currentRow As Integer
+    Dim items As New Collection, cItem As CopyItem, i As Integer, _
+           j As Integer, columnLetter As String, currentRow As Integer, _
+           columnNumber As Integer
     
     For i = 1 To Count
         Set cItem = New CopyItem
+        currentRow = StartRow + i - 1
         With cItem
             If IsSingleColumn Then
-                cItem.ItemsToCopy.Add Range(i, 1).Value
+                columnNumber = Sheet.Range(startAddress).Column
+                
+                cItem.ItemsToCopy.Add Sheet.Cells(currentRow, columnNumber).Value
             Else
-                currentRow = StartRow + i - 1
+                
                 'Sort column is always first item in list
                 .CopyItemDate = Sheet.Range(SortColumn & currentRow).Value
                 .IsOffset = IsOffsetRange
