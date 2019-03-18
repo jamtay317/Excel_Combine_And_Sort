@@ -119,7 +119,12 @@ Public Property Get Sheet() As Worksheet
 End Property
 
 Public Property Get Count() As Integer
-    Count = Range.Rows.Count
+    Dim lr As Integer, sr As Integer, startRange As Range
+
+    Set startRange = Sheet.Range(startAddress)
+    lr = LastRow(startRange)
+    sr = startRange.Row
+    Count = lr - sr + 1
 End Property
 
 Public Property Get CopyItems() As Collection
@@ -148,6 +153,7 @@ Public Property Get CopyItems() As Collection
             End If
         End With
         items.Add cItem
+        Debug.Print cItem.CopyItemDate, items.Count
     Next i
     
     Set CopyItems = items
