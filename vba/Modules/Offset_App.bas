@@ -62,6 +62,8 @@ Private Function CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer,
     If Not rItem.DCECopyRange Is Nothing Then
         For i = 1 To rItem.DCECopyRange.CopyToColumns.Count
             letter = rItem.DCECopyRange.CopyToColumns(i)
+                
+           'rItem.DCEItem should be a collection of rows that need coppied
             copyToSheet.Range(letter & rowNumber).Value = rItem.DCEItem.ItemsToCopy(i)
         Next i
     End If
@@ -69,6 +71,8 @@ Private Function CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer,
     If Not rItem.DownLinkCopyRange Is Nothing Then
         For i = 1 To rItem.DownLinkCopyRange.CopyToColumns.Count
             letter = rItem.DownLinkCopyRange.CopyToColumns(i)
+            
+           'rItem.DownLinkItem should be a collection of rows that need coppied
             copyToSheet.Range(letter & rowNumber).Value = rItem.DownLinkItem.ItemsToCopy(i)
         Next i
     End If
