@@ -41,30 +41,11 @@ Public Sub AddCopyRange(cRange As CopyRange, myReportItem As ReportItem)
     
 End Sub
 
-Public Sub Sort()
+Public Sub sort()
     Dim i As Integer, j As Integer, currentItem As ReportItem, compareItem As ReportItem, itemToMove As ReportItem, newItems As New Collection
     
+    CollectionsSort.SortCollection items, "RowDate", True
     
-    For i = 1 To items.Count
-        Set currentItem = items(i)
-
-        For j = i + 1 To items.Count
-            Set compareItem = items(j)
-
-            If currentItem.RowDate < compareItem.RowDate Then
-                Set itemToMove = compareItem
-
-                items.Remove j
-
-                items.Add item:=itemToMove, Key:=itemToMove.RowDate & "", before:=i
-            End If
-        Next j
-    Next i
-
-    For i = items.Count To 1 Step -1
-        newItems.Add items(i)
-    Next i
-    Set items = newItems
 End Sub
 
 Private Sub UpdateItem(ByRef item As ReportItem, cItem As CopyItem)
