@@ -86,7 +86,7 @@ Public Property Get Range() As Range
    Set Range = Sheet.UsedRange
 End Property
 
-Public Property Get NextRow() As Range
+Public Property Get nextRow() As Range
    Dim startRange As Range, lr As Integer, startRowOffset As Integer, Cell1 As Range, Cell2 As Range
 
    
@@ -98,7 +98,7 @@ Public Property Get NextRow() As Range
    Set Cell2 = startRange.Offset(lr, CopyWidth - 1)
 
    
-   Set NextRow = Sheet.Range(Cell1, Cell2)
+   Set nextRow = Sheet.Range(Cell1, Cell2)
 End Property
 
 Public Property Get NextRowInRange() As Range

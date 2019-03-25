@@ -70,9 +70,9 @@ End Sub
 Private Sub UpdateItem(ByRef item As ReportItem, cItem As CopyItem)
     With item
         If cItem.IsOffset Then
-            Set .DownLinkItem = cItem
+            .downlinkItem.Add cItem
         Else
-            Set .DCEItem = cItem
+            .dceItem.Add cItem
         End If
     End With
 End Sub

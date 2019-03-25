@@ -7,15 +7,15 @@ Public Function Single_Column_CopyRanges() As Collection
     Set Single_Column_CopyRanges = New Collection
     
     With Range1
-        .startAddress = "A2"
-        .SheetName = "Sheet1"
+        .startAddress = "N4"
+        .SheetName = "Sheet2"
         .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\Data.xlsx"
         .IsSingleColumn = True
     End With
     Single_Column_CopyRanges.Add Range1
     
     With Range2
-        .startAddress = "A2"
+        .startAddress = "D2"
         .SheetName = "Sheet2"
         .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\Data.xlsx"
         .IsSingleColumn = True

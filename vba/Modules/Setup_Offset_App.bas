@@ -25,7 +25,7 @@ Public Function Add_DCEs() As CopyRange
     Dim dce As New CopyRange
     
     With dce
-        .startAddress = "A2"
+        .startAddress = "A4"
         .SheetName = "Dces"
         .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\newitems.xlsx"
     End With
@@ -43,7 +43,7 @@ Public Function Add_Downlinks() As CopyRange
     Dim DownLink As New CopyRange
     
     With DownLink
-        .startAddress = "D2"
+        .startAddress = "A2"
         .SheetName = "downlinks"
         .WorkbookAddress = "C:\Users\James\Desktop\Excel_Combine_And_Sort\Examples\newitems.xlsx"
         .IsOffsetRange = True

@@ -36,10 +36,11 @@ Public Sub Run_Offset()
     i = copyToRange.StartRow
     For Each rItem In report.items
         If rItem.RowDate > 0 Then
-            Set currentRange = copyToRange.NextRow
+            Set currentRange = copyToRange.nextRow
+            i = GetNextCopyRow(copyToRange.Sheet, rItem)
         
             CopyItemIntoWorkbook rItem, i, copyToRange.Sheet
-            i = i + 1
+            
         End If
     Next rItem
     
@@ -56,25 +57,38 @@ here:
 End Sub
 
 Private Function CopyItemIntoWorkbook(rItem As ReportItem, rowNumber As Integer, ByRef copyToSheet As Worksheet) As Boolean
-    Dim letter As String, i As Integer
+    Dim letter As String, i As Integer, dItem As CopyItem, nextRow As Integer
     
     'this should only try to copy the value to the new sheet if there is a copy range
     If Not rItem.DCECopyRange Is Nothing Then
-        For i = 1 To rItem.DCECopyRange.CopyToColumns.Count
-            letter = rItem.DCECopyRange.CopyToColumns(i)
+        nextRow = rowNumber
+        For Each dItem In rItem.dceItem
+            For i = 1 To rItem.DCECopyRange.CopyToColumns.Count
+                letter = rItem.DCECopyRange.CopyToColumns(i)
+           
+                'rItem.DCEItem should be a collection of rows that need coppied
                 
-           'rItem.DCEItem should be a collection of rows that need coppied
-            copyToSheet.Range(letter & rowNumber).Value = rItem.DCEItem.ItemsToCopy(i)
-        Next i
+                copyToSheet.Range(letter & nextRow).Value = dItem.ItemsToCopy(i)
+           
+            Next i
+            
+            nextRow = nextRow + 1
+
+        Next dItem
     End If
     
     If Not rItem.DownLinkCopyRange Is Nothing Then
-        For i = 1 To rItem.DownLinkCopyRange.CopyToColumns.Count
-            letter = rItem.DownLinkCopyRange.CopyToColumns(i)
+        nextRow = rowNumber
+        For Each dItem In rItem.downlinkItem
             
-           'rItem.DownLinkItem should be a collection of rows that need coppied
-            copyToSheet.Range(letter & rowNumber).Value = rItem.DownLinkItem.ItemsToCopy(i)
-        Next i
+            For i = 1 To rItem.DownLinkCopyRange.CopyToColumns.Count
+                letter = rItem.DownLinkCopyRange.CopyToColumns(i)
+    
+                'rItem.DownLinkItem should be a collection of rows that need coppied
+                copyToSheet.Range(letter & rowNumber).Value = dItem.ItemsToCopy(i)
+            Next i
+            nextRow = nextRow + 1
+        Next dItem
     End If
     
 End Function
@@ -86,3 +100,27 @@ Private Sub CloseCopyFromWorkbooks(rangeCollection As Collection)
         If cRange.IsOpen Then cRange.ItemWorkbook.Close
     Next cRange
 End Sub
+
+
+Private Function GetNextCopyRow(ws As Worksheet, rItem As ReportItem) As Integer
+    Dim columnNumber As Integer, dceNextRow As Integer, downLinkRow As Integer
+    
+    If Not IsNull(DCEDateColumn) And Not DCEDateColumn = "" Then
+        columnNumber = ws.Range(DCEDateColumn & 1).Column
+        dceNextRow = ws.Cells(Rows.Count, columnNumber).End(xlUp).Row + 1
+    End If
+    
+    If Not IsNull(DownLinkDateColumn) And Not DownLinkDateColumn = "" Then
+        columnNumber = ws.Range(DownLinkDateColumn & 1).Column
+        downLinkRow = ws.Cells(Rows.Count, columnNumber).End(xlUp).Row + 1
+    End If
+    
+    If downLinkRow > dceNextRow Then
+        GetNextCopyRow = downLinkRow
+    Else
+        GetNextCopyRow = dceNextRow
+    End If
+    
+    
+    
+End Function

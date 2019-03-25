@@ -39,3 +39,23 @@ End Function
 Public Function LastUsedRow(ws As Worksheet) As Integer
    LastUsedRow = ws.UsedRange.Cells(ws.UsedRange.Rows.Count, 1).Row
 End Function
+
+Public Function DCEDateColumn() As String
+    DCEDateColumn = GetFirstColumn(DCE_CopyTo_Columns)
+End Function
+
+Public Function DownLinkDateColumn() As String
+    DownLinkDateColumn = GetFirstColumn(DownLink_CopyTo_Columns)
+End Function
+
+Public Function GetFirstColumn(dateColumns As String)
+    Dim firstComma As Integer
+    
+    firstComma = InStr(1, dateColumns, ",")
+    
+    If firstComma > 0 Then
+        GetFirstColumn = Left(dateColumns, firstComma - 1)
+    Else
+        GetFirstColumn = Trim(dateColumns)
+    End If
+End Function
